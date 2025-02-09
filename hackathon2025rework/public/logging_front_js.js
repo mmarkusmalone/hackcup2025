@@ -1,18 +1,47 @@
-const players = ["Alice", "Bob", "Charlie", "David", "Eve"];
+
+const express = require("express");
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const path = require('path');
+const { v4: uuidv4 } = require('uuid'); // Add this line to import uuid
+const uri = "mongodb+srv://mcm151:KtG29jf4WhiAxfLK@bitchcup.0jhqe.mongodb.net/?retryWrites=true&w=majority&appName=bitchCup";
+const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
+const port = 3000;
+const app = express();
+require('dotenv').config();
+
+const client = new MongoClient(uri, clientOptions);
+
+async function fetchPlayers() {
+    try {
+        await client.connect();
+        const database = client.db("bitchCup");
+        const collection = database.collections("players");
+        const players = (await collection).find().to.Array();
+        return players
+    }
+    catch(err){
+        console.error(err);
+        return [];
+    } finally {
+        await client.close();
+    }
+}
 
 function populateDropdown(id, data) {
     const dropdown = document.getElementById(id);
     dropdown.innerHTML = '<option value="">Select</option>'; // Reset options
     data.forEach(player => {
         const option = document.createElement("option");
-        option.value = player;
-        option.textContent = player;
+        option.value = player.email;
+        option.textContent = player.name;
         dropdown.appendChild(option);
     });
+    $(`#${id}`).select2();
 }
 
 // Populate partner and opponents dynamically
-window.onload = function () {
+window.onload = async function () {
+    const players = await fetchPlayers();
     populateDropdown("partner", players);
     populateDropdown("opponent1", players);
     populateDropdown("opponent2", players);
