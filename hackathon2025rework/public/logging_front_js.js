@@ -1,27 +1,32 @@
 
-const uri = process.env.MONGODB_URI;
-const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
-const client = new MongoClient(uri, clientOptions);
 
 async function fetchPlayers() {
-    try {
-        await client.connect();
-        const database = client.db("bitchCup");
-        const collection = database.collection("players");
-        const players = await collection.find().toArray();
-
-        console.log("Fetched Players:", players);
-
-        return players;
-    } catch(err){
-        console.error(err);
-        return [];
-    } finally {
-        
+try {
+    console.log("Fetching Now...");
+    const response = await fetch("/api/players");  // API call to backend
+    
+    if(!response.ok){
+        throw new Error("HTTP Error! Status: " + response.status);
     }
+
+    const players = await response.json();
+    console.log("Fetched Players:", players);
+
+    return Array.isArray(players) ? players : [];
+
+} catch (err) {
+    console.error("Error fetching players:", err);
+    return [];
 }
+}
+    
 
 function populateDropdown(id, data) {
+
+    if(!Array.isArray(data)){
+        console.error("No array for ${id}, got", data);
+    }
+
     const dropdown = document.getElementById(id);
     dropdown.innerHTML = '<option value="">Select</option>'; // Reset options
     data.forEach(player => {
@@ -35,7 +40,15 @@ function populateDropdown(id, data) {
 
 // Populate partner and opponents dynamically
 window.onload = async function () {
+    console.log("Window loaded, fetch players");
     const players = await fetchPlayers();
+    console.log("Fetch players for dropdown:", players);
+
+    if (!players || players.length === 0){
+        console.error("No Players");
+        return;
+    }
+
     populateDropdown("partner", players);
     populateDropdown("opponent1", players);
     populateDropdown("opponent2", players);

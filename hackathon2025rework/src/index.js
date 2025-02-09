@@ -9,10 +9,14 @@ const clientOptions = { serverApi: { version: '1', strict: true, deprecationErro
 const port = 3000;
 const app = express();
 
+const cors = require('cors');
+app.use(cors({ origin: '*' }));
+
 const client = new MongoClient(uri, clientOptions);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 // For serving static HTML files
 app.use(express.static(path.join(__dirname, '../public')));
@@ -36,6 +40,33 @@ app.get("/firebase-config", (req, res) => {
         measurementId: process.env.FIREBASE_MEASUREMENT_ID,
     };
     res.json(firebaseConfig);
+});
+
+// API endpoint to fetch players
+app.get("/api/players", async (req, res) => {
+
+    console.log("Request received for /api/players");
+
+    try {
+        await client.connect();
+        const database = client.db("bitchCup");
+        const collection = database.collection("users");
+
+        console.log("Attempting to fetch players...");
+
+        // Fetch all posts, sorted by the latest game
+        const people = await collection.find().toArray();
+
+        console.log("Fetched players: ", people); // Log the fetched data
+
+        res.json(people);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch feed data" });
+    } finally {
+        await client.close();
+    }
 });
 
 app.post("/signup", async (req, res) => {
