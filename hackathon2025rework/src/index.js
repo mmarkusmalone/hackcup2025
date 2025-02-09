@@ -1,6 +1,7 @@
 const express = require("express");
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const path = require('path');
+const { v4: uuidv4 } = require('uuid'); // Add this line to import uuid
 const uri = "mongodb+srv://mcm151:KtG29jf4WhiAxfLK@bitchcup.0jhqe.mongodb.net/?retryWrites=true&w=majority&appName=bitchCup";
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 const port = 3000;
@@ -22,6 +23,31 @@ app.get("/", (req, res) => {
     return res.redirect("index.html");
 });
 
+app.post("/signup", async (req, res) => {
+    const { name, email } = req.body;
+    const userId = uuidv4(); // Generate a unique user ID
+
+    const userData = {
+        userId,
+        name,
+        email,
+    };
+
+    try {
+        await client.connect();
+        const database = client.db("bitchCup");
+        const collection = database.collection("users");
+        await collection.insertOne(userData);
+        console.log("User data inserted successfully!");
+        res.status(201).json({ message: "User created successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to create user" });
+    } finally {
+        await client.close();
+    }
+});
+
 app.post("/formFillUp", async (req, res) => {
     const { gameType, partner, opponent1, opponent2, result, image } = req.body;
 
@@ -33,6 +59,22 @@ app.post("/formFillUp", async (req, res) => {
         result,
         image,
     };
+
+    try {
+        await client.connect();
+        const database = client.db("bitchCup");
+        const collection = database.collection("games");
+        await collection.insertOne(data);
+        console.log("Data inserted successfully!");
+    } catch (err) {
+        console.error(err);
+    } finally {
+        await client.close();
+    }
+
+    console.log("Form submitted!");
+    return res.redirect("feedpage.html");
+});
 
 app.get("/api/feed", async (req, res) => {
     try {
@@ -50,23 +92,6 @@ app.get("/api/feed", async (req, res) => {
     } finally {
         await client.close();
     }
-});
-    
-
-    try {
-        await client.connect();
-        const database = client.db("bitchCup"); // Replace with your database name
-        const collection = database.collection("games");
-        await collection.insertOne(data);
-        console.log("Data inserted successfully!");
-    } catch (err) {
-        console.error(err);
-    } finally {
-        await client.close();
-    }
-
-    console.log("Form submitted!");
-    return res.redirect("feedpage.html");
 });
 
 async function run() {

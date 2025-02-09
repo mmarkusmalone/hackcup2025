@@ -104,37 +104,33 @@
 
         // Handle Sign Up
         async function handleSignUp() {
-
-            // Get the Email Value
+            const name = document.getElementById("name").value;
             const email = document.getElementById("email").value;
-
-            // Get the Password Value 
             const password = document.getElementById("password").value;
 
-            if (email && password) {
-
-                // Try to Authenticate Use 
+            if (name && email && password) {
                 try {
-
-                    // Create User
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-                    // Get User Information
                     const user = userCredential.user;
+                    const response = await fetch("/signup", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({user, name, email}),
+                    });
 
-                    // Change the Window 
-                    window.location.href = "feedpage.html"; // Redirect to feedpage.html
-
-                // Fail Error
+                    if (response.ok) {
+                        window.location.href = "feedpage.html";
+                    } else {
+                        const errorData = await response.json();
+                        alert(errorData.error);
+                    }
                 } catch (error) {
-
                     alert(error.message);
-
-                } // Call createUser with email and password
-
-            // Send Error
+                }
             } else {
-                alert("Please provide both email and password.");
+                alert("Please provide name, email, and password.");
             }
         }
 
