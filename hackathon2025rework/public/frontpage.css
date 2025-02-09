@@ -1,0 +1,19 @@
+.title {
+    text-align: center;
+    padding: 10px;
+    font-size: 2rem
+}
+
+.button {
+    text-decoration: none;
+    color: #FFFFFF;
+    background: #4169E1;
+    padding: .75rem 1.5rem .75rem 1.5rem;
+    display: inline-flex;
+    border-radius: 1.25rem;
+    align-items: center;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    justify-content: space-between;
+    margin: 3px;
+    text-align: center;
+}

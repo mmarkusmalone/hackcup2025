@@ -1,0 +1,74 @@
+.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Your Game</title>
+    <link rel="stylesheet" href="logging_front_css.css">
+</head>
+<body>
+    <a href="feedpage.html" class="button back-button">Back</a>
+
+    <h2>Log Your Game</h2>
+
+    <form id="gameForm" action="/formFillUp" method="post">
+        <!-- Game Type Dropdown -->
+        <label for="gameType">Game:</label>
+        <select id="gameType" name="gameType">
+            <option value="Pong">Pong</option>
+            <option value="Beer Ball">Beer Ball</option>
+            <option value="Die">Die</option>
+            <option value="Baseball">Baseball</option>
+            <option value="BFL">BFL</option>
+        </select>
+
+        <!-- Partner Dropdown (gonna be populated from database) -->
+        <label for="partner">Teammate:</label>
+        <select id="partner" name="partner">
+            <option value="">Loading...</option>
+        </select>
+
+        <!-- Opponent 1 Dropdown -->
+        <label for="opponent1">Opponent 1:</label>
+        <select id="opponent1" name="opponent1">
+            <option value="">Loading...</option>
+        </select>
+
+        <!-- Opponent 2 Dropdown -->
+        <label for="opponent2">Opponent 2:</label>
+        <select id="opponent2" name="opponent2">
+            <option value="">Loading...</option>
+        </select>
+
+        <!-- Winner/Loser Dropdown -->
+        <label for="result">Winner/Loser:</label>
+        <select id="result" name="result">
+            <option value="Winner">Winner</option>
+            <option value="Loser">Loser</option>
+        </select>
+        <br><br>
+
+        <label>Take a Picture or Upload:</label>
+
+        <!-- Camera Section -->
+        <video id="video" width="300" height="200" autoplay style="display: none;"></video>
+        <button type="button" id="startCamera">Enable Camera</button>
+        <button type="button" id="capturePhoto" style="display: none;">Capture Photo</button>
+
+        <!-- Image Upload -->
+        <div class="upload-container">
+            <label for="uploadPhoto" class="upload-label">Upload Photo</label>
+            <input type="file" id="uploadPhoto" name="image" accept="image/*">
+        </div>
+
+        <!-- Display Captured or Uploaded Image -->
+        <img id="photo" src="" alt="Captured Image" style="display: none; width: 300px;">
+
+        <!-- Ready Button -->
+        <button type="submit" id="readyButton" class="button otherbutton">Ready</button>
+    </form>
+
+    <script src="logging_front_js.js"></script>
+</body>
+</html>

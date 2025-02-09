@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+    <!-- Add Firebase SDKs for v9.x.x modular approach -->
+    <script type="module">
+
+        // Import the Functions from SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
+
+        // Firebase Information
+        const firebaseConfig = {
+            apiKey: "AIzaSyAnBQsZQd1hgZw8Vxzu-tdjHzKE2cxQShs",
+            authDomain: "bitchcup.firebaseapp.com",
+            projectId: "bitchcup",
+            storageBucket: "bitchcup.firebasestorage.app",
+            messagingSenderId: "369068773771",
+            appId: "1:369068773771:web:a678b40c7fd857e74a5f8e",
+            measurementId: "G-GGJ0SFVPCQ"
+        };
+
+        // Initialize the FireBase App
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app); // Get auth instance
+
+        // Handle Sign Up
+        async function handleLogIn() {
+
+            // Get the Email Value
+            const email = document.getElementById("email").value;
+
+            // Get the Password Value 
+            const password = document.getElementById("password").value;
+
+            if (email && password) {
+
+                // Try to Authenticate Use 
+                try {
+
+                    // Create User
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+                    // Get User Information
+                    const user = userCredential.user;
+
+                    // Change the Window 
+                    window.location.href = "../feedpage.html"; // Redirect to feedpage.html
+
+                // Fail Error
+                } catch (error) {
+
+                    alert(error.message);
+
+                } // Call createUser with email and password
+
+            // Send Error
+            } else {
+                alert("Please provide both email and password.");
+            }
+        }
+
+        // Attach the event listener to the button
+        document.getElementById("logInButton").addEventListener("click", handleLogIn);
+
+    </script>
+</head>
+<body>
+    <h1>Log In</h1>
+    <input type="email" id="email" placeholder="Enter email" required><br><br>
+    <input type="password" id="password" placeholder="Enter password" required><br><br>
+    <button id="logInButton">Let's Play</button>
+</body>
+</html>

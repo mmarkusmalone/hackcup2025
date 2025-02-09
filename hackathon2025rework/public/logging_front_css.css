@@ -1,0 +1,91 @@
+/* General Page Styling */
+body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+}
+
+/* Ensure all inputs, labels, and buttons are aligned */
+label, select, button, input {
+    display: block;
+    margin: 10px auto;
+    padding: 8px;
+    width: 90%;
+}
+
+video, img {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 10px;
+}
+
+/* General Button Styling - Applies to All Buttons */
+/* General Button Styling - Applies to All Buttons */
+button, .button {
+    text-decoration: none;
+    color: #FFFFFF;
+    background: #4169E1;
+    padding: 5px 10px;  /* Reduce padding to make buttons smaller */
+    display: inline-flex;
+    border-radius: 20px; /* Rounded buttons */
+    align-items: center;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    justify-content: center;
+    font-size: 14px;  /* Reduce font size */
+    border: none;
+    cursor: pointer;
+    min-width: 30px;  /* Reduce width */
+    height: 40px;  /* Reduce height */
+    text-align: center;
+}
+
+/* Back Button - Keep Small in Top-Left */
+.back-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 14px;
+    padding: 5px 10px;
+    min-width: 80px;
+    height: 35px;
+    border-radius: 20px;
+    z-index: 1000;
+}
+
+.otherbutton {
+    font-size: 14px;
+    padding: 5px 10px;
+    min-width: 530px;
+    height: 30px;
+    border-radius: 20px;
+}
+
+/* Upload Photo Button - Match Other Buttons */
+.upload-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #FFFFFF;
+    background: #4169E1;
+    padding: 5px 5px; /* Same smaller padding */
+    border-radius: 25px; /* Keep rounded */
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 14px; /* Reduce font size */
+    border: none;
+    cursor: pointer;
+    min-width: 30px; /* Match other buttons */
+    height: 35px; /* Match other buttons */
+    text-align: center;
+}
+
+/* Hide the Default File Input */
+input[type="file"] {
+    display: none;
+}
+
+/* Hover effect for all buttons */
+button:hover, .button:hover, .upload-label:hover {
+    background-color: #0056b3;
+}

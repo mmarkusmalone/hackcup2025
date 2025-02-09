@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Leaderboard Container */
+        .leaderboard-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        /* Leaderboard Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #e12905;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="../feedback/logo.jpeg" alt="Logo">
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="../feedpage.html">Feed</a></li>
+                <li class="dropdown">
+                    <a href="#">Communities ▼</a>
+                    <div class="dropdown-content">
+                        <a href="#">Community 1</a>
+                        <a href="#">Community 2</a>
+                        <a href="#">Community 3</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Leaderboard Container -->
+    <div class="leaderboard-container">
+        <h2>Leaderboard</h2>
+
+        <!-- Filters -->
+        <div class="filters">
+            <select id="communityFilter">
+                <option value="all">All Communities</option>
+                <option value="Community 1">Community 1</option>
+                <option value="Community 2">Community 2</option>
+                <option value="Community 3">Community 3</option>
+            </select>
+
+            <select id="gameFilter">
+                <option value="all">All Games</option>
+                <option value="Pong">Pong</option>
+                <option value="Beer Ball">Beer Ball</option>
+                <option value="Die">Die</option>
+                <option value="Baseball">Baseball</option>
+                <option value="BFL">BFL</option>
+            </select>
+        </div>
+
+        <!-- Leaderboard Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Community</th>
+                    <th>Game</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard">
+                <!-- Dynamic Leaderboard Data -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Sample Data
+        const leaderboardData = [
+            { rank: 1, user: "Alice", community: "Community 1", game: "Pong", points: 1500 },
+            { rank: 2, user: "Bob", community: "Community 2", game: "Beer Ball", points: 1400 },
+            { rank: 3, user: "Charlie", community: "Community 1", game: "Die", points: 1350 },
+            { rank: 4, user: "David", community: "Community 3", game: "Baseball", points: 1300 },
+            { rank: 5, user: "Eve", community: "Community 2", game: "BFL", points: 1250 },
+            { rank: 6, user: "Frank", community: "Community 3", game: "Pong", points: 1200 },
+            { rank: 7, user: "Grace", community: "Community 1", game: "Beer Ball", points: 1150 },
+            { rank: 8, user: "Hank", community: "Community 3", game: "Die", points: 1100 }
+        ];
+
+        function renderLeaderboard(filterCommunity = "all", filterGame = "all") {
+            const leaderboard = document.getElementById("leaderboard");
+            leaderboard.innerHTML = ""; // Clear existing rows
+
+            let filteredData = leaderboardData.filter(entry => {
+                return (filterCommunity === "all" || entry.community === filterCommunity) &&
+                       (filterGame === "all" || entry.game === filterGame);
+            });
+
+            filteredData.forEach(entry => {
+                let row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${entry.rank}</td>
+                    <td>${entry.user}</td>
+                    <td>${entry.community}</td>
+                    <td>${entry.game}</td>
+                    <td>${entry.points}</td>
+                `;
+                leaderboard.appendChild(row);
+            });
+        }
+
+        // Event Listeners for Filters
+        document.getElementById("communityFilter").addEventListener("change", function() {
+            renderLeaderboard(this.value, document.getElementById("gameFilter").value);
+        });
+
+        document.getElementById("gameFilter").addEventListener("change", function() {
+            renderLeaderboard(document.getElementById("communityFilter").value, this.value);
+        });
+
+        // Initial Render
+        renderLeaderboard();
+    </script>
+
+</body>
+</html>
