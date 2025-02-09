@@ -24,6 +24,19 @@ app.get("/", (req, res) => {
     return res.redirect("index.html");
 });
 
+app.get("/firebase-config", (req, res) => {
+    const firebaseConfig = {
+        apiKey: process.env.FIREBASE_API_KEY,
+        authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+        appId: process.env.FIREBASE_APP_ID,
+        measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+    };
+    res.json(firebaseConfig);
+});
+
 app.post("/signup", async (req, res) => {
     const { name, email } = req.body;
     const userId = uuidv4(); // Generate a unique user ID
