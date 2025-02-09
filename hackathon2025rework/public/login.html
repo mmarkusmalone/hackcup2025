@@ -15,6 +15,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
+            background-color: #C8C8C8;
         }
 
         /* Full-page centering */
@@ -79,52 +80,42 @@
 
     </style>
 
-    
     <script type="module">
-
         // Import the Functions from SDK
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
-
-        // Firebase Information
-        const firebaseConfig = {
-            apiKey: "AIzaSyAnBQsZQd1hgZw8Vxzu-tdjHzKE2cxQShs",
-            authDomain: "bitchcup.firebaseapp.com",
-            projectId: "bitchcup",
-            storageBucket: "bitchcup.firebasestorage.app",
-            messagingSenderId: "369068773771",
-            appId: "1:369068773771:web:a678b40c7fd857e74a5f8e",
-            measurementId: "G-GGJ0SFVPCQ"
-        };
-        async function getFirebaseConfig() {
-            const response = await fetch("/firebase-config");
-            return response.json();
-        }
-
-        getFirebaseConfig().then(firebaseConfig => {
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app); // Get auth instance
-
-            // Handle Log In
-            async function handleLogIn() {
-                const email = document.getElementById("email").value;
-                const password = document.getElementById("password").value;
-
-                if (email && password) {
-                    try {
-                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                        const user = userCredential.user;
-                        window.location.href = "feedpage.html"; // Redirect to feedpage.html
-                    } catch (error) {
-                        alert(error.message);
-                    }
-                } else {
-                    alert("Please provide both email and password.");
+        import('https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js').then(({ initializeApp }) => {
+            import('https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js').then(({ getAuth, signInWithEmailAndPassword }) => {
+                // Fetch Firebase configuration from the server
+                async function getFirebaseConfig() {
+                    const response = await fetch("/firebase-config");
+                    return response.json();
                 }
-            }
 
-            // Attach the event listener to the button
-            document.getElementById("logInButton").addEventListener("click", handleLogIn);
+                getFirebaseConfig().then(firebaseConfig => {
+                    const app = initializeApp(firebaseConfig);
+                    const auth = getAuth(app);
+
+                    // Handle Log In
+                    async function handleLogIn() {
+                        const email = document.getElementById("email").value;
+                        const password = document.getElementById("password").value;
+
+                        if (email && password) {
+                            try {
+                                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                                const user = userCredential.user;
+                                window.location.href = "feedpage.html"; // Redirect to feedpage.html
+                            } catch (error) {
+                                alert(error.message);
+                            }
+                        } else {
+                            alert("Please provide both email and password.");
+                        }
+                    }
+
+                    // Attach the event listener to the button
+                    document.getElementById("logInButton").addEventListener("click", handleLogIn);
+                });
+            });
         });
     </script>
 </head>

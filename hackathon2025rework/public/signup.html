@@ -3,7 +3,6 @@
 <head>
     <link rel="stylesheet" href="frontpage.css">
 </head>
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,56 +81,55 @@
     </style>
     
     <script type="module">
-
         // Import the Functions from SDK
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
-
-        // Fetch Firebase configuration from the server
-        async function getFirebaseConfig() {
-            const response = await fetch("/firebase-config");
-            return response.json();
-        }
-
-        // Handle Sign Up
-        getFirebaseConfig().then(firebaseConfig => {
-            const app = initializeApp(firebaseConfig);
-
-            const auth = getAuth(app);
-
-            async function handleSignUp() {
-                const name = document.getElementById("name").value;
-                const email = document.getElementById("email").value;
-                const password = document.getElementById("password").value;
-
-                if (name && email && password) {
-                    try {
-                        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                        const user = userCredential.user;
-                        const response = await fetch("/signup", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({user, name, email}),
-                        });
-
-                        if (response.ok) {
-                            window.location.href = "feedpage.html";
-                        } else {
-                            const errorData = await response.json();
-                            alert(errorData.error);
-                        }
-                    } catch (error) {
-                        alert(error.message);
-                    }
-                } else {
-                    alert("Please provide name, email, and password.");
+        import('https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js').then(({ initializeApp }) => {
+            import('https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js').then(({ getAuth, createUserWithEmailAndPassword }) => {
+                // Fetch Firebase configuration from the server
+                async function getFirebaseConfig() {
+                    const response = await fetch("/firebase-config");
+                    return response.json();
                 }
-            }
 
-            // Attach the event listener to the button
-            document.getElementById("signUpButton").addEventListener("click", handleSignUp);
+                getFirebaseConfig().then(firebaseConfig => {
+                    const app = initializeApp(firebaseConfig);
+                    const auth = getAuth(app);
+
+                    // Handle Sign Up
+                    async function handleSignUp() {
+                        const name = document.getElementById("name").value;
+                        const email = document.getElementById("email").value;
+                        const password = document.getElementById("password").value;
+
+                        if (name && email && password) {
+                            try {
+                                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                                const user = userCredential.user;
+                                const response = await fetch("/signup", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({ user, name, email }),
+                                });
+
+                                if (response.ok) {
+                                    window.location.href = "feedpage.html";
+                                } else {
+                                    const errorData = await response.json();
+                                    alert(errorData.error);
+                                }
+                            } catch (error) {
+                                alert(error.message);
+                            }
+                        } else {
+                            alert("Please provide name, email, and password.");
+                        }
+                    }
+
+                    // Attach the event listener to the button
+                    document.getElementById("signUpButton").addEventListener("click", handleSignUp);
+                });
+            });
         });
     </script>
 </head>

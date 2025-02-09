@@ -14,8 +14,6 @@ const client = new MongoClient(uri, clientOptions);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-console.log("FIREBASE_API_KEY:", process.env.FIREBASE_API_KEY);
-
 // For serving static HTML files
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -37,7 +35,6 @@ app.get("/firebase-config", (req, res) => {
         appId: process.env.FIREBASE_APP_ID,
         measurementId: process.env.FIREBASE_MEASUREMENT_ID,
     };
-    console.log("APIK",firebaseConfig.apiKey)
     res.json(firebaseConfig);
 });
 
