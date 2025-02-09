@@ -77,6 +77,7 @@ app.post("/signup", async (req, res) => {
         userId,
         name,
         email,
+        games: [],
     };
 
     try {
@@ -95,43 +96,68 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/formFillUp", async (req, res) => {
-    const { gameType, partner, opponent1, opponent2, result, image } = req.body;
+    const { userId, gameType, partner, opponent1, opponent2, result, image } = req.body;
 
-    const data = {
+    const gameData = {
+        gameId: uuidv4(),
         gameType,
         partner,
         opponent1,
         opponent2,
         result,
         image,
+        timestamp: new Date(),
     };
 
     try {
         await client.connect();
         const database = client.db("bitchCup");
-        const collection = database.collection("games");
-        await collection.insertOne(data);
-        console.log("Data inserted successfully!");
+        const usersCollection = database.collection("users");
+
+        // Find user and update their games array
+        const updateResult = await usersCollection.updateOne(
+            { userId: userId },
+            { $push: { games: gameData } }
+        );
+
+        if (updateResult.modifiedCount === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        console.log("Game inserted successfully!");
+        res.status(201).json({ message: "Game recorded successfully", redirect: "/feedpage.html" });
+
     } catch (err) {
         console.error(err);
+        res.status(500).json({ error: "Failed to record game" });
     } finally {
         await client.close();
     }
-
-    console.log("Form submitted!");
-    return res.redirect("feedpage.html");
 });
+
 
 app.get("/api/feed", async (req, res) => {
     try {
         await client.connect();
         const database = client.db("bitchCup");
-        const collection = database.collection("games");
+        const usersCollection = database.collection("users");
 
-        // Fetch all posts, sorted by the latest game
-        const posts = await collection.find().sort({ _id: -1 }).toArray();
+        // Fetch all users and include userId, name, and their games
+        const users = await usersCollection.find({}, { projection: { userId: 1, name: 1, games: 1, _id: 0 } }).toArray();
 
-        res.json(posts);
+        // Transform data: include player name inside each game
+        let allGames = users.flatMap(user =>
+            (user.games || []).map(game => ({
+                ...game,
+                playerName: user.name, // Attach player name
+                userId: user.userId,   // Keep userId for potential linking
+            }))
+        );
+
+        // Sort games by timestamp (most recent first)
+        allGames.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        res.json(allGames);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Failed to fetch feed data" });
@@ -139,6 +165,8 @@ app.get("/api/feed", async (req, res) => {
         await client.close();
     }
 });
+
+
 
 async function run() {
     try {
