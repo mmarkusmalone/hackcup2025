@@ -1,14 +1,6 @@
 
-const express = require("express");
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const path = require('path');
-const { v4: uuidv4 } = require('uuid'); // Add this line to import uuid
-const uri = "mongodb+srv://mcm151:KtG29jf4WhiAxfLK@bitchcup.0jhqe.mongodb.net/?retryWrites=true&w=majority&appName=bitchCup";
+const uri = process.env.MONGODB_URI;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
-const port = 3000;
-const app = express();
-require('dotenv').config();
-
 const client = new MongoClient(uri, clientOptions);
 
 async function fetchPlayers() {
@@ -17,9 +9,8 @@ async function fetchPlayers() {
         const database = client.db("bitchCup");
         const collection = database.collections("players");
         const players = (await collection).find().to.Array();
-        return players
-    }
-    catch(err){
+        return players;
+    } catch(err){
         console.error(err);
         return [];
     } finally {
