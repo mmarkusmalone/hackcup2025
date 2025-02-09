@@ -6,6 +6,7 @@ const uri = "mongodb+srv://mcm151:KtG29jf4WhiAxfLK@bitchcup.0jhqe.mongodb.net/?r
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 const port = 3000;
 const app = express();
+require('dotenv').config();
 
 const client = new MongoClient(uri, clientOptions);
 
