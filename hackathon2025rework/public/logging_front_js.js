@@ -9,6 +9,9 @@ async function fetchPlayers() {
         const database = client.db("bitchCup");
         const collection = database.collection("players");
         const players = await collection.find().toArray();
+
+        console.log("Fetched Players:", players);
+
         return players;
     } catch(err){
         console.error(err);
