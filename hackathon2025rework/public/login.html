@@ -81,10 +81,8 @@
     </style>
 
     <script type="module">
-        // Import the Functions from SDK
         import('https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js').then(({ initializeApp }) => {
             import('https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js').then(({ getAuth, signInWithEmailAndPassword }) => {
-                // Fetch Firebase configuration from the server
                 async function getFirebaseConfig() {
                     const response = await fetch("/firebase-config");
                     return response.json();
