@@ -1,19 +1,66 @@
-.title {
+<style>
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Full-page centering */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffffff;
+    flex-direction: column;
     text-align: center;
-    padding: 10px;
-    font-size: 2rem
+}
+
+/* Logo styling */
+.logo img {
+    width: 250px; /* Adjust size */
+    height: auto;
+    margin-bottom: 20px;
+}
+
+
+
+/* Button styling */
+.buttons {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between buttons */
+    margin-top: 20px;
 }
 
 .button {
-    text-decoration: none;
-    color: #FFFFFF;
-    background: #4169E1;
-    padding: .75rem 1.5rem .75rem 1.5rem;
-    display: inline-flex;
-    border-radius: 1.25rem;
-    align-items: center;
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
-    justify-content: space-between;
-    margin: 3px;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    display: inline-block;
+    width: 250px;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: bold;
     text-align: center;
+    background-color: #e12905;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s;
 }
+
+.button:hover {
+    background-color: #e12905;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+.title {
+    color: black;
+    background-color:white;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    padding:30px;
+    font-size:60px;
+}
+

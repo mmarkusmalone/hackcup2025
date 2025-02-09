@@ -1,16 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="frontpage.css">
+</head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In</title>
-    <!-- Add Firebase SDKs for v9.x.x modular approach -->
+
+    <style>
+        /* Reset default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Full-page centering */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffffff;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        /* Button styling */
+        .buttons {
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Space between buttons */
+            margin-top: 20px;
+        }
+
+        .button {
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            display: inline-block;
+            width: 250px;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            background-color: #e12905;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .button:hover {
+            background-color: #e12905;
+        }
+
+        .open {
+            display: block;
+            margin: 0 auto;
+            width: 300px;
+            padding: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            background-color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            border-color: #e12905;
+            padding: 7px;
+            transition: background 0.3s;
+
+        }
+
+        input::placeholder{
+            color:#e12905;
+        }
+
+    </style>
+
+    
     <script type="module">
 
         // Import the Functions from SDK
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
-        // import {firebaseConfig} from './firebase/cred/bitchcupcred.js';
+
         // Firebase Information
         const firebaseConfig = {
             apiKey: "AIzaSyAnBQsZQd1hgZw8Vxzu-tdjHzKE2cxQShs",
@@ -47,7 +122,7 @@
                     const user = userCredential.user;
 
                     // Change the Window 
-                    window.location.href = "../feedpage.html"; // Redirect to feedpage.html
+                    window.location.href = "../feedback/feedpage.html"; // Redirect to feedpage.html
 
                 // Fail Error
                 } catch (error) {
@@ -68,9 +143,10 @@
     </script>
 </head>
 <body>
-    <h1>Log In</h1>
-    <input type="email" id="email" placeholder="Enter email" required><br><br>
-    <input type="password" id="password" placeholder="Enter password" required><br><br>
-    <button id="logInButton">Let's Play</button>
+    <h1 class="title">Log In</h1>
+    <input type="email" id="email" placeholder="Enter Email" class="open" required><br><br>
+    <input type="password" id="password" placeholder="Enter Password" class="open" required><br><br>
+    <button id="logInButton" class="button">Let's Play</button><br>
+    <button id="back" onclick="window.history.back();" class="button">Back</button>
 </body>
 </html>
