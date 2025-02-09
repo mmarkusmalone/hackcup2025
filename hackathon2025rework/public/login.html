@@ -96,50 +96,36 @@
             appId: "1:369068773771:web:a678b40c7fd857e74a5f8e",
             measurementId: "G-GGJ0SFVPCQ"
         };
-
-        // Initialize the FireBase App
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app); // Get auth instance
-
-        // Handle Sign Up
-        async function handleLogIn() {
-
-            // Get the Email Value
-            const email = document.getElementById("email").value;
-
-            // Get the Password Value 
-            const password = document.getElementById("password").value;
-
-            if (email && password) {
-
-                // Try to Authenticate Use 
-                try {
-
-                    // Create User
-                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
-                    // Get User Information
-                    const user = userCredential.user;
-
-                    // Change the Window 
-                    window.location.href = "../feedback/feedpage.html"; // Redirect to feedpage.html
-
-                // Fail Error
-                } catch (error) {
-
-                    alert(error.message);
-
-                } // Call createUser with email and password
-
-            // Send Error
-            } else {
-                alert("Please provide both email and password.");
-            }
+        async function getFirebaseConfig() {
+            const response = await fetch("/firebase-config");
+            return response.json();
         }
 
-        // Attach the event listener to the button
-        document.getElementById("logInButton").addEventListener("click", handleLogIn);
+        getFirebaseConfig().then(firebaseConfig => {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app); // Get auth instance
 
+            // Handle Log In
+            async function handleLogIn() {
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+
+                if (email && password) {
+                    try {
+                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                        const user = userCredential.user;
+                        window.location.href = "feedpage.html"; // Redirect to feedpage.html
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                } else {
+                    alert("Please provide both email and password.");
+                }
+            }
+
+            // Attach the event listener to the button
+            document.getElementById("logInButton").addEventListener("click", handleLogIn);
+        });
     </script>
 </head>
 <body>
