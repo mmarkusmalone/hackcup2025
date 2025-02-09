@@ -115,3 +115,35 @@ document.getElementById("uploadPhoto").addEventListener("change", function (even
 function goBack(){
     window.history.back();
 }
+document.getElementById("gameForm").addEventListener("submit", async function (event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const formData = new FormData(this);
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+        alert("User ID not found. Please log in again.");
+        return;
+    }
+    formData.append("userId", userId);
+
+    try {
+        console.log("🔄 Submitting game data...");
+        const response = await fetch("/formFillUp", {
+            method: "POST",
+            body: formData,
+        });
+
+        const data = await response.json();
+        console.log("✅ Server response:", data);
+
+        if (data.redirect) {
+            console.log("🔀 Redirecting to:", data.redirect);
+            window.location.href = data.redirect; // Redirect to feedpage.html
+        } else {
+            alert("Game recorded, but no redirect URL received.");
+        }
+    } catch (error) {
+        console.error("❌ Error submitting game:", error);
+        alert("Error submitting game. Check console.");
+    }
+});

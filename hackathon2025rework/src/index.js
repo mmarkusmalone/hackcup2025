@@ -69,35 +69,9 @@ app.get("/api/players", async (req, res) => {
     }
 });
 
-app.post("/signup", async (req, res) => {
-    const { name, email } = req.body;
-    const userId = uuidv4(); // Generate a unique user ID
-
-    const userData = {
-        userId,
-        name,
-        email,
-        games: [],
-    };
-
-    try {
-        await client.connect();
-        const database = client.db("bitchCup");
-        const collection = database.collection("users");
-        await collection.insertOne(userData);
-        console.log("User data inserted successfully!");
-        res.status(201).json({ message: "User created successfully" });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Failed to create user" });
-    } finally {
-        await client.close();
-    }
-});
-
 app.post("/formFillUp", async (req, res) => {
     const { userId, gameType, partner, opponent1, opponent2, result, image } = req.body;
-
+    console.log("🔍 Received game submission for userId:", userId);
     const gameData = {
         gameId: uuidv4(),
         gameType,
@@ -121,10 +95,11 @@ app.post("/formFillUp", async (req, res) => {
         );
 
         if (updateResult.modifiedCount === 0) {
+            console.error("❌ User not found in database:", userId);
             return res.status(404).json({ error: "User not found" });
         }
 
-        console.log("Game inserted successfully!");
+        console.log("✅ Game inserted successfully for userId:", userId);
         res.status(201).json({ message: "Game recorded successfully", redirect: "/feedpage.html" });
 
     } catch (err) {
