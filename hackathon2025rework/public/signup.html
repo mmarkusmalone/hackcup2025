@@ -104,33 +104,37 @@
 
         // Handle Sign Up
         async function handleSignUp() {
-            const name = document.getElementById("name").value;
+
+            // Get the Email Value
             const email = document.getElementById("email").value;
+
+            // Get the Password Value 
             const password = document.getElementById("password").value;
 
-            if (name && email && password) {
-                try {
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    const user = userCredential.user;
-                    const response = await fetch("/signup", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({user, name, email}),
-                    });
+            if (email && password) {
 
-                    if (response.ok) {
-                        window.location.href = "feedpage.html";
-                    } else {
-                        const errorData = await response.json();
-                        alert(errorData.error);
-                    }
+                // Try to Authenticate Use 
+                try {
+
+                    // Create User
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+                    // Get User Information
+                    const user = userCredential.user;
+
+                    // Change the Window 
+                    window.location.href = "../feedback/feedpage.html"; // Redirect to feedpage.html
+
+                // Fail Error
                 } catch (error) {
+
                     alert(error.message);
-                }
+
+                } // Call createUser with email and password
+
+            // Send Error
             } else {
-                alert("Please provide name, email, and password.");
+                alert("Please provide both email and password.");
             }
         }
 
