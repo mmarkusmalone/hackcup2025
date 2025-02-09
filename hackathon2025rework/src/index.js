@@ -1,17 +1,20 @@
+require('dotenv').config();
+
 const express = require("express");
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid'); // Add this line to import uuid
-const uri = "mongodb+srv://mcm151:KtG29jf4WhiAxfLK@bitchcup.0jhqe.mongodb.net/?retryWrites=true&w=majority&appName=bitchCup";
+const { v4: uuidv4 } = require('uuid');
+const uri = process.env.MONGODB_URI;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 const port = 3000;
 const app = express();
-require('dotenv').config();
 
 const client = new MongoClient(uri, clientOptions);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+console.log("FIREBASE_API_KEY:", process.env.FIREBASE_API_KEY);
 
 // For serving static HTML files
 app.use(express.static(path.join(__dirname, '../public')));
@@ -34,6 +37,7 @@ app.get("/firebase-config", (req, res) => {
         appId: process.env.FIREBASE_APP_ID,
         measurementId: process.env.FIREBASE_MEASUREMENT_ID,
     };
+    console.log("APIK",firebaseConfig.apiKey)
     res.json(firebaseConfig);
 });
 
