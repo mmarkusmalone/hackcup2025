@@ -7,14 +7,14 @@ async function fetchPlayers() {
     try {
         await client.connect();
         const database = client.db("bitchCup");
-        const collection = database.collections("players");
-        const players = (await collection).find().to.Array();
+        const collection = database.collection("players");
+        const players = await collection.find().toArray();
         return players;
     } catch(err){
         console.error(err);
         return [];
     } finally {
-        await client.close();
+        
     }
 }
 
