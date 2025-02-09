@@ -34,6 +34,25 @@ app.post("/formFillUp", async (req, res) => {
         image,
     };
 
+app.get("/api/feed", async (req, res) => {
+    try {
+        await client.connect();
+        const database = client.db("bitchCup");
+        const collection = database.collection("games");
+
+        // Fetch all posts, sorted by the latest game
+        const posts = await collection.find().sort({ _id: -1 }).toArray();
+
+        res.json(posts);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch feed data" });
+    } finally {
+        await client.close();
+    }
+});
+    
+
     try {
         await client.connect();
         const database = client.db("bitchCup"); // Replace with your database name
